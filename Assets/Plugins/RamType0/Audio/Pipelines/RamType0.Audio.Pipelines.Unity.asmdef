@@ -1,0 +1,30 @@
+{
+    "name": "RamType0.Audio.Pipelines.Unity",
+    "references": [
+        "UniTask",
+        "Unity.Burst"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "System.IO.Pipelines.dll",
+        "System.Memory.dll",
+        "System.Runtime.CompilerServices.Unsafe.dll",
+        "System.Buffers.dll",
+        "System.Threading.Tasks.Extensions.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_MODULES_AUDIO"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.modules.audio",
+            "expression": "",
+            "define": "UNITY_MODULES_AUDIO"
+        }
+    ],
+    "noEngineReferences": false
+}
