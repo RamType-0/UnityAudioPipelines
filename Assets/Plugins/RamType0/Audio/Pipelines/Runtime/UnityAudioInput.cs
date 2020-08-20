@@ -11,6 +11,8 @@ using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Unity.Burst;
+using System.Threading;
+
 namespace RamType0.Audio.Pipelines
 {
     public static class UnityAudioInput
@@ -68,32 +70,23 @@ namespace RamType0.Audio.Pipelines
 
     public static class AudioSequence
     {
-        public static float ComputeVolumeFloat32(ReadOnlySequence<byte> audioData)
+        public static float ComputeAudioLevelFloat32(ReadOnlySequence<byte> audioData)
         {
             float volume = 0;
             var index = 0;
             foreach (var memory in audioData)
             {
                 var span = MemoryMarshal.Cast<byte, float>(memory.Span);
-                unsafe
+                ref var r = ref MemoryMarshal.GetReference(span);
+                for (int i = 0; i < span.Length; i++)
                 {
-                    fixed(float* ptr = span)
-                    {
-                        new ComputeSpanVolumeJob()
-                        {
-                            SpanPtr = ptr,
-                            SpanLength = span.Length,
-                            VolumePtr = &volume,
-                            IndexPtr = &index,
-                        }.Run();
-                    }
+                    volume += (Math.Abs(Unsafe.Add(ref r, i)) - volume) / ++index;
+                    //volume += (Math.Abs(span[i]) - volume) / ++index;
                 }
-                //ref var r = ref MemoryMarshal.GetReference(span);
-                //for (int i = 0; i < span.Length; i++)
-                //{
-                //    volume += (Math.Abs(Unsafe.Add(ref r, i)) - volume) / ++index;
-                //    //volume += (Math.Abs(span[i]) - volume) / ++index;
-                //}
+
+
+
+
             }
             return volume;
         }

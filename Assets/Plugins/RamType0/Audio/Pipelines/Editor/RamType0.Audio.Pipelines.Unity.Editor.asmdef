@@ -1,0 +1,33 @@
+{
+    "name": "RamType0.Audio.Pipelines.Unity.Editor",
+     "references": [
+        "UniTask",
+        "Unity.Burst",
+        "RamType0.Audio.Pipelines.Unity"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "System.IO.Pipelines.dll",
+        "System.Memory.dll",
+        "System.Runtime.CompilerServices.Unsafe.dll",
+        "System.Buffers.dll",
+        "System.Threading.Tasks.Extensions.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_MODULES_AUDIO"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.modules.audio",
+            "expression": "",
+            "define": "UNITY_MODULES_AUDIO"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Label text="MicrophoneDeviceName" name="MicrophoneDeviceName" />
+    <uie:ProgressBar title="Audio Level" high-value="1" name="AudioLevel" style="height: 15px;" />
+</ui:UXML>
