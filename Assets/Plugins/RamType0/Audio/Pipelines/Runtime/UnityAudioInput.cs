@@ -63,6 +63,7 @@ namespace RamType0.Audio.Pipelines
             }
             finally
             {
+                await UniTask.SwitchToMainThread();
                 Microphone.End(deviceName);
             }
         }
