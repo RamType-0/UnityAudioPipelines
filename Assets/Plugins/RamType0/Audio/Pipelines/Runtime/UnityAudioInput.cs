@@ -19,16 +19,21 @@ namespace RamType0.Audio.Pipelines
     {
         public static PipeReader CreateMicrophoneAudioReader(string deviceName, int sampleRate, int bufferLengthSec = 1)
         {
-            var clip = Microphone.Start(deviceName, true, bufferLengthSec, sampleRate);
             var pipe = new Pipe();
-            RunCaptureTask(deviceName, clip, pipe.Writer).Forget();
+            RunCaptureTask(deviceName,sampleRate,bufferLengthSec, pipe.Writer).Forget();
             return pipe.Reader;
         }
-        static async UniTaskVoid RunCaptureTask(string deviceName, AudioClip clip, PipeWriter pipeWriter)
+        static async UniTaskVoid RunCaptureTask(string deviceName, int sampleRate, int bufferLengthSec, PipeWriter pipeWriter)
         {
+            Exception exception = null;
             try
             {
-                await UniTask.WaitUntil(() => Microphone.GetPosition(deviceName) > 0);
+                await UniTask.SwitchToMainThread();
+                var clip = Microphone.Start(deviceName, true, bufferLengthSec, sampleRate);
+                while (Microphone.GetPosition(deviceName) <= 0)
+                {
+                    await UniTask.Yield();
+                }
                 FlushResult flushResult;
                 var previousPos = 0;
                 float[] buffer = new float[clip.samples];//AudioClip.GetData raises warning for longer buffer
@@ -58,13 +63,13 @@ namespace RamType0.Audio.Pipelines
             }
             catch (Exception e)
             {
-                pipeWriter.Complete(e);
-                return;
+                exception = e;
             }
             finally
             {
                 await UniTask.SwitchToMainThread();
                 Microphone.End(deviceName);
+                pipeWriter.Complete(exception);
             }
         }
     }
@@ -84,9 +89,6 @@ namespace RamType0.Audio.Pipelines
                     volume += (Math.Abs(Unsafe.Add(ref r, i)) - volume) / ++index;
                     //volume += (Math.Abs(span[i]) - volume) / ++index;
                 }
-
-
-
 
             }
             return volume;
